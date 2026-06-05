@@ -1,8 +1,9 @@
 import { ThemeProvider } from './context/ThemeContext';
 import { LanguageProvider } from './context/LanguageContext';
 import Navbar from './components/Navbar';
+import Hero from './components/Hero';
 
-// Placeholder — we'll replace this with real sections one by one
+// Placeholder — we'll replace with real sections one by one
 function ComingSoon({ id, label }: { id: string; label: string }) {
   return (
     <section
@@ -28,7 +29,7 @@ function MainApp() {
     <div style={{ minHeight: '100dvh', backgroundColor: 'var(--background)', color: 'var(--foreground)' }}>
       <Navbar />
       <main>
-        <ComingSoon id="hero"       label="Hero" />
+        <Hero />
         <ComingSoon id="process"    label="Our Process" />
         <ComingSoon id="categories" label="Categories" />
         <ComingSoon id="bazar"      label="Smart Bazar" />
