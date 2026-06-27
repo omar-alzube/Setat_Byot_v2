@@ -76,23 +76,21 @@ export default function Navbar() {
     <>
       {/* ── Navbar bar ──────────────────────────────────── */}
       <motion.nav
-        // Slide down on first load
-        initial={{ y: -100, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.6, ease: 'easeOut' }}
         style={{
           position: 'fixed',
           top: 0,
           left: 0,
           right: 0,
           zIndex: 100,
-          // When scrolled: add blur background + gold bottom border
-          // When at top: fully transparent
-          backgroundColor: scrolled ? 'rgba(19, 19, 19, 0.88)' : 'transparent',
+          backgroundColor: scrolled
+            ? (isDark ? 'rgba(19,19,19,0.92)' : 'rgba(244,240,232,0.95)')
+            : 'transparent',
           backdropFilter: scrolled ? 'blur(20px)' : 'none',
           WebkitBackdropFilter: scrolled ? 'blur(20px)' : 'none',
           borderBottom: scrolled ? '1px solid var(--accent-border)' : '1px solid transparent',
-          transition: 'background-color 0.4s ease, border-color 0.4s ease, backdrop-filter 0.4s ease',
+          opacity: scrolled ? 1 : 0,
+          pointerEvents: scrolled ? 'auto' : 'none',
+          transition: 'opacity 0.4s ease, background-color 0.4s ease, border-color 0.4s ease',
           height: 'var(--navbar-height)',
         }}
       >
@@ -118,7 +116,7 @@ export default function Navbar() {
             <img
               src={logo}
               alt="ستات بيوت"
-              style={{ height: '52px', width: 'auto', objectFit: 'contain' }}
+              style={{ height: '68px', width: 'auto', objectFit: 'contain' }}
             />
           </button>
 
@@ -142,7 +140,7 @@ export default function Navbar() {
                 style={{
                   background: 'none',
                   border: 'none',
-                  color: 'rgba(229, 226, 225, 0.8)',
+                  color: 'var(--foreground)',
                   fontSize: isArabic ? '1rem' : '0.85rem',
                   fontFamily: isArabic ? 'var(--font-arabic)' : 'var(--font-sans)',
                   fontWeight: isArabic ? 500 : 500,
@@ -282,7 +280,7 @@ export default function Navbar() {
               left: 0,
               right: 0,
               zIndex: 99,
-              backgroundColor: 'rgba(19, 19, 19, 0.97)',
+              backgroundColor: isDark ? 'rgba(19,19,19,0.97)' : 'rgba(244,240,232,0.98)',
               backdropFilter: 'blur(20px)',
               borderBottom: '1px solid var(--accent-border)',
               overflow: 'hidden',
@@ -306,7 +304,7 @@ export default function Navbar() {
                   style={{
                     background: 'none',
                     border: 'none',
-                    color: 'rgba(229, 226, 225, 0.85)',
+                    color: 'var(--foreground)',
                     fontSize: '1.1rem',
                     fontFamily: isArabic ? 'var(--font-arabic)' : 'var(--font-sans)',
                     fontWeight: 500,

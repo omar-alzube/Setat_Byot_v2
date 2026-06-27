@@ -2,27 +2,13 @@ import { ThemeProvider } from './context/ThemeContext';
 import { LanguageProvider } from './context/LanguageContext';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
-
-// Placeholder — we'll replace with real sections one by one
-function ComingSoon({ id, label }: { id: string; label: string }) {
-  return (
-    <section
-      id={id}
-      style={{
-        minHeight: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderBottom: '1px solid var(--border)',
-        color: 'var(--muted-foreground)',
-        fontSize: '1.2rem',
-        letterSpacing: '0.05em',
-      }}
-    >
-      {label} — coming soon
-    </section>
-  );
-}
+import PlatformIntro from './components/PlatformIntro';
+import OurProcess from './components/OurProcess';
+import Categories from './components/Categories';
+import SmartBazar from './components/SmartBazar';
+import Catering from './components/Catering';
+import AboutUs from './components/AboutUs';
+import DownloadCTA from './components/DownloadCTA';
 
 function MainApp() {
   return (
@@ -30,12 +16,14 @@ function MainApp() {
       <Navbar />
       <main>
         <Hero />
-        <ComingSoon id="process"    label="Our Process" />
-        <ComingSoon id="categories" label="Categories" />
-        <ComingSoon id="bazar"      label="Smart Bazar" />
-        <ComingSoon id="catering"   label="Catering" />
-        <ComingSoon id="about"      label="About Us" />
+        <PlatformIntro />
+        <OurProcess />
+        <Categories />
+        <SmartBazar />
+        <Catering />
+        <AboutUs />
       </main>
+      <DownloadCTA />
     </div>
   );
 }

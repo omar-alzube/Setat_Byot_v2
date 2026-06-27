@@ -1,260 +1,210 @@
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useLanguage } from '../context/LanguageContext';
+import { useEffect, useRef, useState } from 'react';
+import { Play, Pause, Volume2, VolumeX, Maximize } from 'lucide-react';
+import type { CSSProperties } from 'react';
+// @ts-ignore – mp4 resolved as URL by Vite
+import adVideo from '../settat byoot ad1 V1.mp4';
 
-// ── Hero images ────────────────────────────────────────────────────────────
-import hero1 from '../assets/hero1.jpg';
-import hero2 from '../assets/hero2.jpg';
-import hero3 from '../assets/hero3.jpg';
-import hero4 from '../assets/hero4.jpg';
-import hero5 from '../assets/hero5.jpg';
-import hero6 from '../assets/hero6.jpg';
-
-const SLIDES = [hero1, hero2, hero3, hero4, hero5, hero6];
-
-// How long each slide stays (ms)
-const SLIDE_DURATION = 4500;
-
-// ── Scroll helper ──────────────────────────────────────────────────────────
-function scrollTo(id: string) {
-  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
-
-// ── Hero component ─────────────────────────────────────────────────────────
 export default function Hero() {
-  const { language, t } = useLanguage();
-  const [current, setCurrent] = useState(0);
-  const [paused, setPaused] = useState(false);
+  const videoRef   = useRef<HTMLVideoElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+  const hideTimer  = useRef<ReturnType<typeof setTimeout>>();
+  const unmuteOnce = useRef(false);
 
-  const isArabic = language === 'ar';
+  const [playing,      setPlaying]      = useState(true);
+  const [muted,        setMuted]        = useState(true);
+  const [showControls, setShowControls] = useState(false);
+  const userPaused = useRef(false);
 
-  // Auto-advance slides unless user hovered over dots
+  // Pause only when hero is completely out of view; resume when back
   useEffect(() => {
-    if (paused) return;
-    const timer = setInterval(() => {
-      setCurrent(prev => (prev + 1) % SLIDES.length);
-    }, SLIDE_DURATION);
-    return () => clearInterval(timer);
-  }, [paused]);
+    const section = sectionRef.current;
+    if (!section) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        const v = videoRef.current;
+        if (!v) return;
+        if (entry.isIntersecting) {
+          if (!userPaused.current) {
+            v.play()
+              .then(() => setPlaying(true))
+              .catch(() => setPlaying(false));
+          }
+        } else {
+          v.pause();
+          setPlaying(false);
+        }
+      },
+      { threshold: 0 },
+    );
+    observer.observe(section);
+    return () => observer.disconnect();
+  }, []);
+
+  // Keep playing/paused icon in sync with whatever the browser actually does
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!v) return;
+    const onPlay  = () => setPlaying(true);
+    const onPause = () => setPlaying(false);
+    v.addEventListener('play',  onPlay);
+    v.addEventListener('pause', onPause);
+    return () => {
+      v.removeEventListener('play',  onPlay);
+      v.removeEventListener('pause', onPause);
+    };
+  }, []);
+
+  // Unmute + set medium volume on first interaction; re-play in case unmute paused it
+  useEffect(() => {
+    const doUnmute = () => {
+      if (unmuteOnce.current) return;
+      unmuteOnce.current = true;
+      const v = videoRef.current;
+      if (!v) return;
+      v.muted  = false;
+      v.volume = 0.5;
+      setMuted(false);
+      if (!userPaused.current) {
+        v.play().catch(() => {});
+      }
+    };
+    const events = ['click', 'keydown', 'touchstart', 'pointerdown'] as const;
+    events.forEach(e => window.addEventListener(e, doUnmute, { once: true, passive: true }));
+    return () => events.forEach(e => window.removeEventListener(e, doUnmute));
+  }, []);
+
+
+  const togglePlay = () => {
+    const v = videoRef.current;
+    if (!v) return;
+    if (v.paused) {
+      userPaused.current = false;
+      v.play().then(() => setPlaying(true)).catch(() => setPlaying(false));
+    } else {
+      userPaused.current = true;
+      v.pause();
+      setPlaying(false);
+    }
+  };
+
+  const toggleMute = () => {
+    const v = videoRef.current;
+    if (!v) return;
+    unmuteOnce.current = true; // prevent double-fire from global listener
+    if (v.muted || v.volume === 0) {
+      v.muted  = false;
+      v.volume = 0.5;
+      setMuted(false);
+    } else {
+      v.muted = true;
+      setMuted(true);
+    }
+  };
+
+  const goFullscreen = () => videoRef.current?.requestFullscreen?.();
+
+  const revealControls = () => {
+    setShowControls(true);
+    clearTimeout(hideTimer.current);
+    hideTimer.current = setTimeout(() => setShowControls(false), 3000);
+  };
+
+  const hideControls = () => {
+    clearTimeout(hideTimer.current);
+    setShowControls(false);
+  };
 
   return (
     <section
       id="hero"
-      style={{
-        position: 'relative',
-        height: '100dvh',
-        width: '100%',
-        overflow: 'hidden',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}
+      ref={sectionRef}
+      onMouseMove={revealControls}
+      onMouseEnter={revealControls}
+      onMouseLeave={hideControls}
+      onTouchStart={revealControls}
+      style={{ position: 'relative', height: '100dvh', width: '100%', overflow: 'hidden' }}
     >
-      {/* ── Slideshow background ──────────────────────────── */}
-      <div style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
+      <video
+        ref={videoRef}
+        src={adVideo}
+        autoPlay
+        loop
+        muted
+        playsInline
+        style={{
+          position: 'absolute', inset: 0,
+          width: '100%', height: '100%',
+          objectFit: 'cover', objectPosition: 'center',
+        }}
+      />
 
-        {/* Images — crossfade using AnimatePresence */}
-        <AnimatePresence mode="sync">
-          <motion.img
-            key={current}
-            src={SLIDES[current]}
-            alt={`Hero slide ${current + 1}`}
-            initial={{ opacity: 0, scale: 1.04 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 1.4, ease: 'easeInOut' }}
-            style={{
-              position: 'absolute',
-              inset: 0,
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-              objectPosition: 'center 30%',
-            }}
-          />
-        </AnimatePresence>
-
-        {/* Dark gradient overlay — bottom is fully dark, top is semi-transparent */}
-        <div style={{
-          position: 'absolute',
-          inset: 0,
-          background: 'linear-gradient(to top, var(--background) 0%, rgba(19,19,19,0.65) 50%, rgba(19,19,19,0.25) 100%)',
-        }} />
-      </div>
-
-      {/* ── Text + buttons ────────────────────────────────── */}
-      <div style={{
-        position: 'relative',
-        zIndex: 10,
-        maxWidth: '900px',
-        width: '100%',
-        margin: '0 auto',
-        padding: '0 24px',
-        textAlign: 'center',
-        marginTop: '80px', // offset for navbar height
-      }}>
-        <motion.div
-          initial={{ opacity: 0, y: 32 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: 0.2, ease: 'easeOut' }}
-        >
-
-          {/* ── Title ─────────────────────────────────────── */}
-          {isArabic ? (
-            <h1 style={{
-              fontFamily: 'var(--font-arabic)',
-              fontSize: 'clamp(3rem, 8vw, 7rem)',
-              fontWeight: 700,
-              color: 'var(--foreground)',
-              lineHeight: 1.1,
-              marginBottom: '24px',
-              textShadow: '0 4px 24px rgba(0,0,0,0.6)',
-            }}>
-              {t('hero.title')}
-            </h1>
-          ) : (
-            <h1 style={{
-              fontFamily: 'var(--font-serif)',
-              fontSize: 'clamp(3rem, 8vw, 7rem)',
-              fontWeight: 500,
-              color: 'var(--foreground)',
-              lineHeight: 1.1,
-              marginBottom: '24px',
-              textShadow: '0 4px 24px rgba(0,0,0,0.6)',
-            }}>
-              Setat <em style={{ color: 'var(--accent)', fontStyle: 'italic' }}>Byot</em>
-            </h1>
-          )}
-
-          {/* ── Subtitle ──────────────────────────────────── */}
-          <p style={{
-            fontFamily: isArabic ? 'var(--font-arabic)' : 'var(--font-sans)',
-            fontSize: 'clamp(1rem, 2.5vw, 1.35rem)',
-            color: 'rgba(229,226,225,0.92)',
-            maxWidth: '700px',
-            margin: '0 auto 40px',
-            lineHeight: 1.7,
-            fontWeight: 400,
-            textShadow: '0 2px 12px rgba(0,0,0,0.5)',
-          }}>
-            {t('hero.subtitle')}
-          </p>
-
-          {/* ── Buttons ───────────────────────────────────── */}
-          <div style={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '16px',
-          }}>
-
-            {/* Primary — Download App */}
-            <button
-              style={{
-                backgroundColor: 'var(--primary)',
-                border: '1px solid var(--accent-border)',
-                borderRadius: '4px',
-                padding: '14px 36px',
-                color: 'var(--accent)',
-                fontFamily: isArabic ? 'var(--font-arabic)' : 'var(--font-sans)',
-                fontSize: isArabic ? '1.05rem' : '0.9rem',
-                fontWeight: 600,
-                letterSpacing: isArabic ? '0' : '0.06em',
-                textTransform: isArabic ? 'none' : 'uppercase',
-                cursor: 'pointer',
-                transition: 'background 0.2s, box-shadow 0.2s',
-                minWidth: '180px',
-              }}
-              className="hero-btn-primary"
-            >
-              {t('nav.download')}
-            </button>
-
-            {/* Secondary — Explore Platform */}
-            <button
-              onClick={() => scrollTo('process')}
-              style={{
-                backgroundColor: 'transparent',
-                border: '1px solid var(--accent)',
-                borderRadius: '4px',
-                padding: '14px 36px',
-                color: 'var(--accent)',
-                fontFamily: isArabic ? 'var(--font-arabic)' : 'var(--font-sans)',
-                fontSize: isArabic ? '1.05rem' : '0.9rem',
-                fontWeight: 600,
-                letterSpacing: isArabic ? '0' : '0.06em',
-                textTransform: isArabic ? 'none' : 'uppercase',
-                cursor: 'pointer',
-                transition: 'background 0.2s, box-shadow 0.2s',
-                minWidth: '180px',
-              }}
-              className="hero-btn-secondary"
-            >
-              {t('hero.explore')}
-            </button>
-
-          </div>
-        </motion.div>
-      </div>
-
-      {/* ── Slide dot indicators ──────────────────────────── */}
+      {/* Controls overlay */}
       <div
         style={{
           position: 'absolute',
-          bottom: '32px',
-          left: 0,
-          right: 0,
+          bottom: 0, left: 0, right: 0,
           zIndex: 10,
+          padding: '48px 32px 28px',
+          background: 'linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 100%)',
           display: 'flex',
-          justifyContent: 'center',
-          gap: '10px',
+          alignItems: 'center',
+          gap: '12px',
+          opacity: showControls ? 1 : 0,
+          pointerEvents: showControls ? 'auto' : 'none',
+          transition: 'opacity 0.35s ease',
         }}
-        // Pause auto-advance when hovering dots
-        onMouseEnter={() => setPaused(true)}
-        onMouseLeave={() => setPaused(false)}
       >
-        {SLIDES.map((_, i) => (
-          <button
-            key={i}
-            onClick={() => setCurrent(i)}
-            aria-label={`Go to slide ${i + 1}`}
-            style={{
-              width: i === current ? '28px' : '10px',
-              height: '10px',
-              borderRadius: '999px',
-              border: 'none',
-              cursor: 'pointer',
-              transition: 'all 0.35s ease',
-              backgroundColor: i === current
-                ? 'var(--accent)'
-                : 'rgba(255,255,255,0.3)',
-              padding: 0,
-            }}
-          />
-        ))}
+        <CtrlBtn onClick={togglePlay} label={playing ? 'Pause' : 'Play'}>
+          {playing ? <Pause size={18} /> : <Play size={18} fill="white" />}
+        </CtrlBtn>
+
+        <CtrlBtn onClick={toggleMute} label={muted ? 'Unmute' : 'Mute'}>
+          {muted ? <VolumeX size={18} /> : <Volume2 size={18} />}
+        </CtrlBtn>
+
+        <div style={{ flex: 1 }} />
+
+        <CtrlBtn onClick={goFullscreen} label="Fullscreen">
+          <Maximize size={18} />
+        </CtrlBtn>
       </div>
-
-      {/* ── Scoped hover styles ───────────────────────────── */}
-      <style>{`
-        .hero-btn-primary:hover {
-          background: var(--primary-hover) !important;
-          box-shadow: var(--accent-glow) !important;
-        }
-        .hero-btn-secondary:hover {
-          background: var(--accent-dim) !important;
-          box-shadow: var(--accent-glow) !important;
-        }
-
-        /* Mobile: stack buttons full width */
-        @media (max-width: 480px) {
-          .hero-btn-primary,
-          .hero-btn-secondary {
-            width: 100% !important;
-            min-width: unset !important;
-          }
-        }
-      `}</style>
     </section>
+  );
+}
+
+function CtrlBtn({
+  onClick, label, children,
+}: {
+  onClick: () => void;
+  label: string;
+  children: React.ReactNode;
+}) {
+  const [hovered, setHovered] = useState(false);
+  const style: CSSProperties = {
+    width: '42px',
+    height: '42px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    background: hovered ? 'rgba(255,255,255,0.22)' : 'rgba(0,0,0,0.45)',
+    border: '1px solid rgba(255,255,255,0.25)',
+    borderRadius: '50%',
+    color: '#fff',
+    cursor: 'pointer',
+    backdropFilter: 'blur(8px)',
+    WebkitBackdropFilter: 'blur(8px)',
+    transition: 'background 0.2s',
+    flexShrink: 0,
+  };
+  return (
+    <button
+      onClick={onClick}
+      aria-label={label}
+      style={style}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
+      {children}
+    </button>
   );
 }
