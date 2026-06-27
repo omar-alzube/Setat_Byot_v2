@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Play, Pause, Volume2, VolumeX, Maximize } from 'lucide-react';
 import type { CSSProperties } from 'react';
-// @ts-ignore – mp4 resolved as URL by Vite
-import adVideo from '../settat byoot ad1 V1.mp4';
+const adVideo = 'https://res.cloudinary.com/dn9hqkleo/video/upload/v1782541690/Settat_Byoot_Ad1_V1_u1m7rl.mp4';
 
 export default function Hero() {
   const videoRef   = useRef<HTMLVideoElement>(null);
