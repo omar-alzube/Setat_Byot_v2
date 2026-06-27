@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Play, Pause, Volume2, VolumeX, Maximize } from 'lucide-react';
 import type { CSSProperties } from 'react';
-const adVideo = 'https://res.cloudinary.com/dn9hqkleo/video/upload/v1782541690/Settat_Byoot_Ad1_V1_u1m7rl.mp4';
+const adVideo = 'https://res.cloudinary.com/dn9hqkleo/video/upload/v1782544512/Settat_Byoot_Ad1_V1_1_elha8q.mp4';
 
 export default function Hero() {
   const videoRef   = useRef<HTMLVideoElement>(null);
@@ -14,29 +14,35 @@ export default function Hero() {
   const [showControls, setShowControls] = useState(false);
   const userPaused = useRef(false);
 
-  // Pause only when hero is completely out of view; resume when back
+  // Pause only when hero is completely out of view; resume when back.
+  // Debounce the pause so scroll-momentum on iOS doesn't briefly trigger it.
   useEffect(() => {
     const section = sectionRef.current;
     if (!section) return;
+    let pauseTimer: ReturnType<typeof setTimeout>;
     const observer = new IntersectionObserver(
       ([entry]) => {
         const v = videoRef.current;
         if (!v) return;
         if (entry.isIntersecting) {
+          clearTimeout(pauseTimer);
           if (!userPaused.current) {
             v.play()
               .then(() => setPlaying(true))
               .catch(() => setPlaying(false));
           }
         } else {
-          v.pause();
-          setPlaying(false);
+          pauseTimer = setTimeout(() => {
+            if (!videoRef.current?.isConnected) return;
+            videoRef.current.pause();
+            setPlaying(false);
+          }, 300);
         }
       },
       { threshold: 0 },
     );
     observer.observe(section);
-    return () => observer.disconnect();
+    return () => { observer.disconnect(); clearTimeout(pauseTimer); };
   }, []);
 
   // Keep playing/paused icon in sync with whatever the browser actually does
@@ -67,7 +73,9 @@ export default function Hero() {
         v.play().catch(() => {});
       }
     };
-    const events = ['click', 'keydown', 'touchstart', 'pointerdown'] as const;
+    // Only 'click' and 'keydown' — 'touchstart'/'pointerdown' fire during scroll
+    // and would unmute the video unintentionally on mobile.
+    const events = ['click', 'keydown'] as const;
     events.forEach(e => window.addEventListener(e, doUnmute, { once: true, passive: true }));
     return () => events.forEach(e => window.removeEventListener(e, doUnmute));
   }, []);
@@ -121,7 +129,7 @@ export default function Hero() {
       onMouseEnter={revealControls}
       onMouseLeave={hideControls}
       onTouchStart={revealControls}
-      style={{ position: 'relative', height: '100dvh', width: '100%', overflow: 'hidden' }}
+      style={{ position: 'relative', height: '100svh', minHeight: '-webkit-fill-available', width: '100%', overflow: 'hidden' }}
     >
       <video
         ref={videoRef}

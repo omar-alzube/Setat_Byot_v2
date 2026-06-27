@@ -346,10 +346,10 @@ export default function AboutUs() {
               {
                 label: 'PHONE',
                 links: [
+                  { href: 'tel:+96265323400',   text: '+962 06 532 3400' },
                   { href: 'tel:+9620777233400', text: '+962 77 723 3400' },
                   { href: 'tel:+9620788233400', text: '+962 78 823 3400' },
                   { href: 'tel:+9620798233406', text: '+962 79 823 3406' },
-                  { href: 'tel:065233400',       text: '06 523 3400' },
                 ],
               },
               {
