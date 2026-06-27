@@ -12,7 +12,17 @@ export default function Hero() {
   const [playing,      setPlaying]      = useState(true);
   const [muted,        setMuted]        = useState(true);
   const [showControls, setShowControls] = useState(false);
+  const [viewH,        setViewH]        = useState('100svh');
   const userPaused = useRef(false);
+
+  // Use window.innerHeight so the section fills exactly the visible viewport
+  // on all mobile browsers, regardless of svh/dvh support.
+  useEffect(() => {
+    const update = () => setViewH(`${window.innerHeight}px`);
+    update();
+    window.addEventListener('resize', update);
+    return () => window.removeEventListener('resize', update);
+  }, []);
 
   // Pause only when hero is completely out of view; resume when back.
   // Debounce the pause so scroll-momentum on iOS doesn't briefly trigger it.
@@ -129,7 +139,7 @@ export default function Hero() {
       onMouseEnter={revealControls}
       onMouseLeave={hideControls}
       onTouchStart={revealControls}
-      style={{ position: 'relative', height: '100svh', minHeight: '-webkit-fill-available', width: '100%', overflow: 'hidden' }}
+      style={{ position: 'relative', height: viewH, width: '100%', overflow: 'hidden' }}
     >
       <video
         ref={videoRef}
