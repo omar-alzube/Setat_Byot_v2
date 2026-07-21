@@ -3,6 +3,10 @@ import { Play, Pause, Volume2, VolumeX, Maximize } from 'lucide-react';
 import type { CSSProperties } from 'react';
 const adVideo = 'https://res.cloudinary.com/dn9hqkleo/video/upload/v1782544512/Settat_Byoot_Ad1_V1_1_elha8q.mp4';
 
+type IOSFullscreenVideo = HTMLVideoElement & {
+  webkitEnterFullscreen?: () => void;
+};
+
 export default function Hero() {
   const videoRef   = useRef<HTMLVideoElement>(null);
   const sectionRef = useRef<HTMLElement>(null);
@@ -15,14 +19,23 @@ export default function Hero() {
   const [viewH,        setViewH]        = useState('100svh');
   const userPaused = useRef(false);
 
-  // Use window.innerHeight so the section fills exactly the visible viewport
-  // on all mobile browsers, regardless of svh/dvh support.
+  // Follow the visual viewport so browser bars on iOS/Android do not leave the
+  // video cropped or create an oversized hero after they expand/collapse.
   useEffect(() => {
-    const update = () => setViewH(`${window.innerHeight}px`);
+    const update = () => {
+      const height = window.visualViewport?.height ?? window.innerHeight;
+      setViewH(`${Math.round(height)}px`);
+    };
     update();
     window.addEventListener('resize', update);
-    return () => window.removeEventListener('resize', update);
+    window.visualViewport?.addEventListener('resize', update);
+    return () => {
+      window.removeEventListener('resize', update);
+      window.visualViewport?.removeEventListener('resize', update);
+    };
   }, []);
+
+  useEffect(() => () => clearTimeout(hideTimer.current), []);
 
   // Pause only when hero is completely out of view; resume when back.
   // Debounce the pause so scroll-momentum on iOS doesn't briefly trigger it.
@@ -118,7 +131,31 @@ export default function Hero() {
     }
   };
 
-  const goFullscreen = () => videoRef.current?.requestFullscreen?.();
+  const goFullscreen = () => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    // iPhone Safari exposes native video fullscreen through this method rather
+    // than the standard Fullscreen API used by other modern browsers.
+    const iosVideo = video as IOSFullscreenVideo;
+    if (typeof iosVideo.webkitEnterFullscreen === 'function') {
+      try {
+        iosVideo.webkitEnterFullscreen();
+        return;
+      } catch {
+        // Fall through to the standard API when native fullscreen is refused.
+      }
+    }
+
+    if (video.requestFullscreen) {
+      void video.requestFullscreen().catch(() => {});
+      return;
+    }
+
+    if (sectionRef.current?.requestFullscreen) {
+      void sectionRef.current.requestFullscreen().catch(() => {});
+    }
+  };
 
   const revealControls = () => {
     setShowControls(true);
@@ -139,6 +176,7 @@ export default function Hero() {
       onMouseEnter={revealControls}
       onMouseLeave={hideControls}
       onTouchStart={revealControls}
+      className="hero-video-section"
       style={{ position: 'relative', height: viewH, width: '100%', overflow: 'hidden' }}
     >
       <video
@@ -148,15 +186,17 @@ export default function Hero() {
         loop
         muted
         playsInline
+        preload="metadata"
+        className="hero-video"
         style={{
           position: 'absolute', inset: 0,
           width: '100%', height: '100%',
-          objectFit: 'cover', objectPosition: 'center',
         }}
       />
 
       {/* Controls overlay */}
       <div
+        className="hero-controls"
         style={{
           position: 'absolute',
           bottom: 0, left: 0, right: 0,
@@ -185,6 +225,49 @@ export default function Hero() {
           <Maximize size={18} />
         </CtrlBtn>
       </div>
+
+      <style>{`
+        .hero-video-section {
+          background:
+            radial-gradient(circle at center, rgba(10, 74, 74, 0.28), transparent 62%),
+            #050909;
+        }
+
+        .hero-video {
+          object-fit: cover;
+          object-position: center;
+        }
+
+        .hero-control-btn:focus-visible {
+          outline: 2px solid var(--accent);
+          outline-offset: 3px;
+        }
+
+        /* Phones and tablets show the complete frame instead of cropping it. */
+        @media (max-width: 900px) {
+          .hero-video {
+            object-fit: contain;
+          }
+
+          .hero-controls {
+            opacity: 1 !important;
+            pointer-events: auto !important;
+            padding:
+              52px max(18px, env(safe-area-inset-right))
+              calc(18px + env(safe-area-inset-bottom))
+              max(18px, env(safe-area-inset-left)) !important;
+          }
+
+          .hero-control-btn {
+            width: 46px !important;
+            height: 46px !important;
+          }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .hero-controls { transition: none !important; }
+        }
+      `}</style>
     </section>
   );
 }
@@ -217,6 +300,8 @@ function CtrlBtn({
     <button
       onClick={onClick}
       aria-label={label}
+      title={label}
+      className="hero-control-btn"
       style={style}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}

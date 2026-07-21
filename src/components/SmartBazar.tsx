@@ -32,7 +32,7 @@ export default function SmartBazar() {
 
   return (
     <section
-      id="bazar"
+      id="market"
       ref={ref}
       style={{
         padding: '100px 0',
@@ -56,7 +56,7 @@ export default function SmartBazar() {
           </div>
 
           <p style={{ fontFamily: 'var(--font-sans)', fontSize: '0.75rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--accent)', marginBottom: '12px' }}>
-            {t('bazar.subtitle')}
+            {t('market.subtitle')}
           </p>
 
           <h2 style={{
@@ -66,7 +66,7 @@ export default function SmartBazar() {
             color: 'var(--foreground)',
             marginBottom: '20px',
           }}>
-            {t('bazar.title')}
+            {t('market.title')}
           </h2>
 
           <p style={{
@@ -75,7 +75,7 @@ export default function SmartBazar() {
             color: 'var(--muted-foreground)',
             lineHeight: 1.7,
           }}>
-            {t('bazar.desc')}
+            {t('market.desc')}
           </p>
         </motion.div>
 
@@ -105,7 +105,7 @@ export default function SmartBazar() {
             >
               <img
                 src={p.img}
-                alt=""
+                alt={t(p.label)}
                 style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.7s ease' }}
                 className="bazar-img"
               />
@@ -169,7 +169,7 @@ export default function SmartBazar() {
             className="bazar-btn"
           >
             <span>◆</span>
-            {t('bazar.partnerBtn')}
+            {t('market.partnerBtn')}
           </a>
         </motion.div>
       </div>

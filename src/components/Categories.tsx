@@ -11,13 +11,13 @@ import catHandmade   from '../assets/hero5.jpg';
 // @ts-ignore
 import catProcessing from '../assets/Harvesting many types of fermented gut healthy pickles in mason jars royalty free stock.jpg';
 
-// Menu pages — in the exact order the user specified
-import menu1 from '../assets/WhatsApp Image 2026-06-10 at 12.16.49.jpeg';
-import menu2 from '../assets/WhatsApp Image 2026-06-10 at 12.16.50 (1).jpeg';
-import menu3 from '../assets/WhatsApp Image 2026-06-10 at 12.16.51.jpeg';
-import menu4 from '../assets/WhatsApp Image 2026-06-10 at 12.16.50 (2).jpeg';
-import menu5 from '../assets/WhatsApp Image 2026-06-10 at 12.16.51 (1).jpeg';
-import menu6 from '../assets/WhatsApp Image 2026-06-10 at 12.16.50.jpeg';
+// Menu pages rendered from the current Setat Byot PDF menu.
+import menu1 from '../assets/menu/setat-menu-page-1.png';
+import menu2 from '../assets/menu/setat-menu-page-2.png';
+import menu3 from '../assets/menu/setat-menu-page-3.png';
+import menu4 from '../assets/menu/setat-menu-page-4.png';
+import menu5 from '../assets/menu/setat-menu-page-5.png';
+import menu6 from '../assets/menu/setat-menu-page-6.png';
 
 const MENU_PAGES = [menu1, menu2, menu3, menu4, menu5, menu6];
 

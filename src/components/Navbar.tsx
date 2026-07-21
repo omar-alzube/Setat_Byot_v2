@@ -10,8 +10,10 @@ const NAV_LINKS = [
   { key: 'nav.home',       id: 'hero' },
   { key: 'nav.process',    id: 'process' },
   { key: 'nav.categories', id: 'categories' },
-  { key: 'nav.smartBazar', id: 'bazar' },
+  { key: 'nav.market',     id: 'market' },
+  { key: 'nav.bazaar',     id: 'bazaar' },
   { key: 'nav.catering',   id: 'catering' },
+  { key: 'nav.sponsors',   id: 'sponsors' },
   { key: 'nav.about',      id: 'about' },
 ];
 
@@ -342,7 +344,7 @@ export default function Navbar() {
                     background: 'none',
                   }}
                 >
-                  {isArabic ? 'Switch to English' : 'التبديل إلى العربية'}
+                  {t('nav.switchLang')}
                 </button>
                 <button
                   style={{
