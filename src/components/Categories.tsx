@@ -3,21 +3,18 @@ import { motion, useInView, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 
-// @ts-ignore
-import catFood       from '../assets/Creamy Cajun Sausage Pasta (One Pot).jpg';
-// @ts-ignore
-import catBeverages  from '../assets/milkshake.jpg';
-import catHandmade   from '../assets/hero5.jpg';
-// @ts-ignore
-import catProcessing from '../assets/Harvesting many types of fermented gut healthy pickles in mason jars royalty free stock.jpg';
+import catFood       from '../assets/category-home-cooked-pasta.jpg';
+import catBeverages  from '../assets/category-cold-beverages.jpg';
+import catHandmade   from '../assets/category-handmade-pottery.jpg';
+import catProcessing from '../assets/category-preserved-pickles.jpg';
 
 // Menu pages rendered from the current Setat Byot PDF menu.
-import menu1 from '../assets/menu/setat-menu-page-1.png';
-import menu2 from '../assets/menu/setat-menu-page-2.png';
-import menu3 from '../assets/menu/setat-menu-page-3.png';
-import menu4 from '../assets/menu/setat-menu-page-4.png';
-import menu5 from '../assets/menu/setat-menu-page-5.png';
-import menu6 from '../assets/menu/setat-menu-page-6.png';
+import menu1 from '../assets/menu/setat-byot-menu-cover.png';
+import menu2 from '../assets/menu/setat-byot-menu-international-cuisines.png';
+import menu3 from '../assets/menu/setat-byot-menu-manakish-and-pastries.png';
+import menu4 from '../assets/menu/setat-byot-menu-jordanian-and-palestinian.png';
+import menu5 from '../assets/menu/setat-byot-menu-lebanese-syrian-and-salads.png';
+import menu6 from '../assets/menu/setat-byot-menu-desserts-and-beverages.png';
 
 const MENU_PAGES = [menu1, menu2, menu3, menu4, menu5, menu6];
 

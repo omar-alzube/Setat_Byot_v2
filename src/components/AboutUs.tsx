@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { Award, Target, Flag, Users, ShieldCheck } from 'lucide-react';
-import msisLogo from '../assets/msis-logo.png';
+import msisLogo from '../assets/msis-certification-logo.png';
 import { useLanguage } from '../context/LanguageContext';
 
 const EXPERTISE = [
@@ -282,16 +282,20 @@ export default function AboutUs() {
           ))}
 
           {/* MSIS card header: company name+icon on RIGHT, badge on LEFT (space-between) */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexDirection: isArabic ? 'row' : 'row-reverse', marginBottom: '16px' }}>
+          <div
+            className="msis-header"
+            dir={isArabic ? 'rtl' : 'ltr'}
+            style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexDirection: isArabic ? 'row' : 'row-reverse', marginBottom: '16px' }}
+          >
             {/* Company name + icon — grouped on RIGHT in RTL (first in RTL space-between) */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div className="msis-name" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <IconBox size={42}><ShieldCheck size={20} strokeWidth={1.5} /></IconBox>
               <h4 style={{ fontFamily: fontTitle, fontSize: '1.15rem', fontWeight: isArabic ? 700 : 500, color: 'var(--foreground)', margin: 0 }}>
                 {t('about.partners.msis.name')}
               </h4>
             </div>
             {/* ISO badge — on LEFT in RTL (last in RTL space-between) */}
-            <span style={{
+            <span className="msis-badge" dir={isArabic ? 'rtl' : 'ltr'} style={{
               display: 'inline-flex', alignItems: 'center', gap: '6px',
               border: '1px solid var(--accent-border)',
               padding: '5px 14px',
@@ -306,7 +310,7 @@ export default function AboutUs() {
           </div>
           <Divider />
 
-          {/* Logo LEFT, text RIGHT — direction:ltr forces this regardless of page direction */}
+          {/* Keep the logo physically left while giving the copy its proper language direction. */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '24px', direction: 'ltr' }} className="msis-body">
             <div style={{
               flexShrink: 0,
@@ -321,7 +325,20 @@ export default function AboutUs() {
             }} className="msis-logo-box">
               <img src={msisLogo} alt="MSIS Certifications & More" style={{ width: '100%', height: 'auto', display: 'block' }} />
             </div>
-            <p style={{ fontFamily: fontAr, fontSize: '0.9rem', color: 'var(--muted-foreground)', lineHeight: 1.9, textAlign: tAlign, flex: 1 }}>
+            <p
+              className="msis-description"
+              dir={isArabic ? 'rtl' : 'ltr'}
+              style={{
+                fontFamily: fontAr,
+                fontSize: '0.9rem',
+                color: 'var(--muted-foreground)',
+                lineHeight: 1.9,
+                textAlign: tAlign,
+                flex: 1,
+                margin: 0,
+                unicodeBidi: 'plaintext',
+              }}
+            >
               {t('about.partners.msis.desc')}
             </p>
           </div>
@@ -413,7 +430,27 @@ export default function AboutUs() {
         @media (max-width: 560px) {
           #about > div { padding: 60px 20px !important; }
           .contact-grid { grid-template-columns: 1fr !important; }
-          .msis-logo-box { width: 110px !important; }
+          .msis-header {
+            align-items: stretch !important;
+            flex-direction: column !important;
+            gap: 14px;
+          }
+          .msis-name { justify-content: flex-start; }
+          .msis-badge {
+            align-self: flex-start;
+            justify-content: center;
+          }
+          html[dir="rtl"] .msis-badge { align-self: flex-end; }
+          .msis-body {
+            align-items: stretch !important;
+            flex-direction: column !important;
+            gap: 18px !important;
+          }
+          .msis-logo-box {
+            width: 130px !important;
+            margin: 0 auto;
+          }
+          .msis-description { width: 100%; }
         }
       `}</style>
     </section>

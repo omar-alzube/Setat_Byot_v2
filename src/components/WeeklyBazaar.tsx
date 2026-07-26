@@ -1,24 +1,18 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion, useInView } from 'framer-motion';
-import { Clock, DoorOpen, DoorClosed, Image as ImageIcon } from 'lucide-react';
+import { Clock, DoorOpen, DoorClosed } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { isBazaarOpen, nextOpening, getCountdown, buildGoogleCalendarLink } from '../utils/bazaarSchedule';
-import lionsLogo from '../assets/lions-signature-logo.png';
-// @ts-ignore
-import imgHandmade   from '../assets/wbazaar-handmade.jpg';
-// @ts-ignore
-import imgSweets     from '../assets/wbazaar-sweets.jpg';
-// @ts-ignore
-import imgProvisions from '../assets/wbazaar-provisions.jpg';
-// @ts-ignore
-import imgGifts      from '../assets/wbazaar-gifts.jpg';
+import lionsLogo from '../assets/lions-signature-bazaars-logo.png';
+import imgHandmade   from '../assets/weekly-bazaar-handmade-crafts.jpg';
+import imgSweets     from '../assets/weekly-bazaar-gourmet-dishes.jpg';
+import imgProvisions from '../assets/weekly-bazaar-salads-and-appetizers.jpg';
+import imgGifts      from '../assets/weekly-bazaar-gifts-and-decor.jpg';
 
-// Photo collage tiles — data-driven so real bazaar photos can replace these
-// ones later without touching the layout. Swap the `img` import above for a
-// different file, or set `img` to undefined to fall back to the placeholder
-// pattern (e.g. while waiting on a new batch of real event photos).
+// Photo collage tiles — data-driven so photos can be replaced without
+// changing the layout.
 interface CollageTile {
-  img?: string;
+  img: string;
   labelKey: string;
   large?: boolean;
 }
@@ -191,17 +185,7 @@ export default function WeeklyBazaar() {
                 gridRow: tile.large ? 'span 2' : undefined,
               }}
             >
-              {tile.img ? (
-                <img src={tile.img} alt={t(tile.labelKey)} className="wbazaar-tile-img" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-              ) : (
-                <div style={{
-                  width: '100%', height: '100%',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  background: 'linear-gradient(135deg, var(--accent-dim), var(--surface-high))',
-                }}>
-                  <ImageIcon size={28} strokeWidth={1.2} style={{ color: 'var(--muted-foreground)', opacity: 0.5 }} />
-                </div>
-              )}
+              <img src={tile.img} alt={t(tile.labelKey)} className="wbazaar-tile-img" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               <span style={{
                 position: 'absolute',
                 bottom: '10px',

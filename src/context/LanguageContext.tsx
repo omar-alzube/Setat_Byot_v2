@@ -16,14 +16,6 @@ const translations: Translations = {
   'nav.download':   { en: 'Download App',   ar: 'حمل التطبيق' },
   'nav.switchLang': { en: 'التبديل إلى العربية', ar: 'Switch to English' },
 
-  // ── Hero ────────────────────────────────────────────
-  'hero.title':    { en: 'Setat Byot', ar: 'ستات بيوت' },
-  'hero.subtitle': {
-    en: "The World's First Jordanian Smart Ecosystem for Home Kitchens, Handmade Businesses & Digital Food Services",
-    ar: 'المنصة الأردنية الذكية الأولى عالميًا للمطابخ المنزلية والحرف اليدوية والخدمات الغذائية الرقمية',
-  },
-  'hero.explore': { en: 'Explore Platform', ar: 'استكشف المنصة' },
-
   // ── Platform Intro ───────────────────────────────────
   'intro.title': { en: 'Where Heritage Meets Technology', ar: 'حيث يلتقي التراث بالتكنولوجيا' },
   'intro.desc': {
@@ -109,15 +101,6 @@ const translations: Translations = {
     ar: 'اكتشف منتجات مميزة من شركات وعلامات تجارية موثوقة، واطلب مباشرة من المصدر دون وسيط.',
   },
   'market.partnerBtn': { en: 'Partner with Us', ar: 'تواصل للشراكة' },
-  'market.f1.title': { en: 'Digital Storefronts',    ar: 'متاجر رقمية احترافية' },
-  'market.f1.desc':  { en: 'Every seller owns a dedicated digital store with photos, menus, and full product details.', ar: 'لكل بائع متجره الرقمي الخاص بصور وقوائم وتفاصيل كاملة للمنتجات.' },
-  'market.f2.title': { en: 'Direct from the Maker',  ar: 'مباشرة من يد الصانع' },
-  'market.f2.desc':  { en: 'Know who prepared your food and the story behind every product you order.', ar: 'تعرف على من حضّر طعامك وتعرف قصة كل منتج تطلبه.' },
-  'market.f3.title': { en: 'Smart Delivery',          ar: 'توصيل ذكي لبابك' },
-  'market.f3.desc':  { en: 'A smart logistics network delivers fresh homemade products straight to your doorstep.', ar: 'شبكة لوجستية ذكية تُوصل المنتجات المنزلية الطازجة حتى باب منزلك.' },
-  'market.f4.title': { en: 'Secure Payment',          ar: 'دفع آمن ومتعدد' },
-  'market.f4.desc':  { en: 'Cash on delivery, card, or digital wallet — choose what suits you best.', ar: 'كاش عند الاستلام، بطاقة، أو محفظة رقمية — اختر ما يناسبك.' },
-  'market.explore':  { en: 'Explore Market',           ar: 'استكشف السوق' },
 
   // ── Virtual Bazaar (new weekly 48-hour event) ────────
   'wbazaar.eyebrow':  { en: 'Weekly event · 48 hours only', ar: 'فعالية أسبوعية · 48 ساعة فقط' },
@@ -167,7 +150,6 @@ const translations: Translations = {
   'catering.cta.whatsapp': { en: 'WhatsApp consultation',     ar: 'استشارة واتساب' },
   'catering.photo.weddings':  { en: 'Weddings',           ar: 'أعراس' },
   'catering.photo.corporate': { en: 'Corporate',           ar: 'شركات' },
-  'catering.photo.sweets':    { en: 'Sweets',              ar: 'حلويات' },
   'catering.photo.special':   { en: 'Special occasions',   ar: 'مناسبات خاصة' },
   'catering.step1.title': { en: 'Choose your menu',          ar: 'اختاري قائمتك' },
   'catering.step1.desc':  { en: 'Ready-made menus or fully customized for your occasion', ar: 'قوائم جاهزة أو مصممة خصيصاً لمناسبتك' },
@@ -182,7 +164,7 @@ const translations: Translations = {
 
   // ── Sponsors ────────────────────────────────────────
   'sponsors.eyebrow':  { en: 'Support empowerment', ar: 'ادعم التمكين' },
-  'sponsors.title':    { en: 'Our sponsors',        ar: 'شركاؤنا الرعاة' },
+  'sponsors.title':    { en: 'Our sponsors',        ar: 'الرعاة الرسميون' },
   'sponsors.subtitle': {
     en: 'Join our success partners and support home businesses and the local economy',
     ar: 'انضم إلى شركاء النجاح وادعم المشاريع المنزلية والاقتصاد المحلي',
@@ -206,10 +188,10 @@ const translations: Translations = {
 
   // ── About ────────────────────────────────────────────
   'about.title':          { en: 'About Us',   ar: 'من نحن' },
-  'about.company.name':   { en: 'Creativity & More Business Management', ar: 'مؤسسة Creativity & More لإدارة الأعمال' },
+  'about.company.name':   { en: 'مؤسسة ستات بيوت', ar: 'مؤسسة ستات بيوت' },
   'about.company': {
     en: "One of Jordan's leading specialized firms in integrated solutions for managing, operating, and designing food establishments, entrepreneurial projects, and smart applications. We turn ideas into successful and sustainable ventures.",
-    ar: 'من الشركات الأردنية المتخصصة والرائدة في تقديم حلول متكاملة لإدارة وتشغيل وتصميم المنشآت الغذائية والمشاريع الريادية والتطبيقات الذكية. تحوّل الأفكار إلى مشاريع ناجحة ومستدامة.',
+    ar: 'من المؤسسات الأردنية المتخصصة والرائدة في تقديم حلول متكاملة لإدارة وتشغيل وتصميم المنشآت الغذائية والمشاريع الريادية والتطبيقات الذكية. تحوّل الأفكار إلى مشاريع ناجحة ومستدامة.',
   },
   'about.expertise.title': { en: 'Our Areas of Expertise', ar: 'مجالات خبرتنا' },
   'about.exp1': { en: 'Operations & Management',      ar: 'الإدارة والتشغيل' },
@@ -233,31 +215,20 @@ const translations: Translations = {
   },
   'about.reg.title':    { en: 'Official Information', ar: 'المعلومات الرسمية' },
   'about.reg.iso':      { en: 'ISO 9001 Certified', ar: 'حاصلة على شهادة ISO 9001' },
-  'about.reg.country':  { en: 'Officially Registered Jordanian Company', ar: 'شركة أردنية مسجلة رسمياً' },
+  'about.reg.country':  { en: 'Officially Registered Jordanian Company', ar: 'مؤسسة أردنية مسجلة رسمياً' },
   'about.reg.ministry': { en: 'Ministry of Industry, Trade & Provisioning', ar: 'وزارة الصناعة والتجارة والتمويين' },
   'about.reg.num':      { en: 'Registration No.: 588180', ar: 'رقم التسجيل: 588180' },
   'about.reg.national': { en: 'National No.: 101042113', ar: 'الرقم الوطني: 101042113' },
   'about.reg.trade':    { en: 'Trade Name: 293366', ar: 'الاسم التجاري: 293366' },
   'about.reg.type':     { en: 'Sole Proprietorship', ar: 'مؤسسة فردية' },
 
-  // ── Standards ───────────────────────────────────────
-  'standards.title': { en: 'Quality Standards', ar: 'معايير الجودة' },
-  'standards.desc':  { en: 'We apply international quality and food safety standards across all operations.', ar: 'نطبق معايير الجودة والسلامة الغذائية الدولية في جميع عملياتنا.' },
-  'std.1': { en: 'ISO 9001:2015 – Quality Management',          ar: 'ISO 9001:2015 – إدارة الجودة' },
-  'std.2': { en: 'ISO 27001 – Information Security',            ar: 'ISO 27001 – أمن المعلومات' },
-  'std.3': { en: 'HACCP – Food Safety',                         ar: 'HACCP – سلامة الغذاء' },
-  'std.4': { en: 'Jordan Food & Drug Administration Standards', ar: 'معايير الغذاء والدواء الأردنية' },
-  'std.5': { en: 'Halal Certification Ready',                   ar: 'جاهزية شهادة الحلال' },
-  'std.6': { en: 'Digital Payment Security (PCI-DSS)',          ar: 'أمان المدفوعات الرقمية (PCI-DSS)' },
-  'std.7': { en: 'GDPR-Compliant Data Protection',              ar: 'حماية البيانات وفق GDPR' },
-
   // ── Partners section ────────────────────────────────
   'about.partners.title': { en: 'Our Partners', ar: 'شركاؤنا' },
-  'about.partners.msis.name':  { en: 'MSIS Company', ar: 'شركة MSIS' },
+  'about.partners.msis.name':  { en: 'MSIS Company', ar: 'مؤسسة MSIS' },
   'about.partners.msis.badge': { en: 'Certified Partner — ISO 9001', ar: 'شريك معتمد — ISO 9001' },
   'about.partners.msis.desc': {
     en: "In partnership with MSIS, specialists in quality consulting and institutional excellence, we obtained ISO 9001 and ISO 27001 certifications and implemented world-class operational standards across our platform. Their pivotal role elevated Setat Byot into a certified, professional platform trusted by our clients and partners.",
-    ar: 'بالتعاون مع شركة MSIS، المتخصصة في استشارات الجودة والتميز المؤسسي، تمكّنا من الحصول على شهادتي ISO 9001، ISO 27001 وتطبيق معايير تشغيلية عالمية المستوى عبر منصتنا. كان دورهم محورياً في رفع مستوى ستات بيوت لتصبح منظومة معتمدة ومحترفة تحظى بثقة عملائنا وشركائنا.',
+    ar: 'بالتعاون مع مؤسسة MSIS المتخصصة في استشارات الجودة والتميز المؤسسي، تمكّنا من الحصول على شهادتي ISO 9001 وISO 27001، وتطبيق معايير تشغيلية عالمية المستوى عبر منصتنا. وكان دورها محورياً في رفع مستوى ستات بيوت لتصبح منظومة معتمدة ومحترفة تحظى بثقة عملائنا وشركائنا.',
   },
   'about.contact.title': { en: 'Contact Us', ar: 'تواصل معنا' },
 
@@ -276,21 +247,11 @@ const translations: Translations = {
   'about.std7': { en: 'Corporate Governance Systems',         ar: 'أنظمة الحوكمة المؤسسية' },
 
   // ── Contact ──────────────────────────────────────────
-  'contact.title':         { en: 'Contact Information',        ar: 'معلومات التواصل' },
   'contact.address': {
     en: 'Amman, Jordan – Al-Shmeisani, opposite Ministry of Industry, Trade & Provisioning, Arif Al-Anbatawi St., Al-Jawouni Building, 3rd Floor',
     ar: 'عمّان-الأردن - الشميساني - مقابل وزارة الصناعة والتجارة والتمويين - شارع عارف العنبتاوي - بناية الجاعوني - الطابق الثالث',
   },
   'contact.pobox':  { en: 'P.O. Box: Amman 142859 – 11814 Jordan', ar: 'صندوق البريد: Amman 142859 – 11814 Jordan' },
-  'contact.phone':  {
-    en: 'Phone: +962 79 823 3406 / 06 523 3400',
-    ar: 'الهاتف: +962 79 823 3406 / 06 523 3400',
-  },
-  'contact.email.info':        { en: 'INFO@setatbyot.com',         ar: 'INFO@setatbyot.com' },
-  'contact.email.ceo':         { en: 'CEO@setatbyot.com',          ar: 'CEO@setatbyot.com' },
-  'contact.email.catering':    { en: 'CATERING@setatbyot.com',     ar: 'CATERING@setatbyot.com' },
-  'contact.email.sponsorship': { en: 'SPONSORSHIP@setatbyot.com',  ar: 'SPONSORSHIP@setatbyot.com' },
-  'contact.email.hr':          { en: 'HR@setatbyot.com',           ar: 'HR@setatbyot.com' },
   'contact.website':       { en: 'www.setatbyot.com',          ar: 'www.setatbyot.com' },
 
   // ── Download CTA ─────────────────────────────────────

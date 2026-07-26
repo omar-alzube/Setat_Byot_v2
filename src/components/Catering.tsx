@@ -5,12 +5,11 @@ import {
   BadgeCheck,
   CalendarDays,
   ChefHat,
-  MessageCircle,
   Truck,
 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
-import cateringImg from '../assets/catering-event-spread.jpeg';
-import cateringDetailImg from '../assets/catering-team-buffet.jpeg';
+import cateringImg from '../assets/catering-event-food-display.jpeg';
+import cateringDetailImg from '../assets/catering-event-service-team.jpeg';
 
 const STEPS = [
   { icon: CalendarDays, titleKey: 'catering.step1.title', descKey: 'catering.step1.desc' },
@@ -25,7 +24,26 @@ const OCCASIONS = [
 ];
 
 const BOOK_MAILTO = `mailto:Catering@setatbyot.com?subject=${encodeURIComponent('طلب خدمة كيترينج - ستات بيوت')}`;
-const WHATSAPP_URL = `https://wa.me/962788233400?text=${encodeURIComponent('مرحباً، أرغب بالاستفسار عن خدمات الكيترينج')}`;
+const WHATSAPP_URL = `https://wa.me/962777233400?text=${encodeURIComponent('مرحباً، أرغب بالاستفسار عن خدمات الكيترينج')}`;
+
+function WhatsAppIcon() {
+  return (
+    <svg
+      width="21"
+      height="21"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M20.5 11.6a8.5 8.5 0 0 1-12.56 7.47L3.5 20.5l1.45-4.3A8.5 8.5 0 1 1 20.5 11.6Z" />
+      <path d="M8.1 7.4c.25-.28.62-.23.82-.05l1.13 1.45c.16.21.17.49.03.71l-.55.87c.57 1.23 1.56 2.22 2.79 2.79l.87-.55c.22-.14.5-.13.71.03l1.45 1.13c.18.2.23.57-.05.82-.55.5-1.27.77-2.01.74-3.63-.17-6.54-3.08-6.71-6.71-.03-.74.24-1.46.74-2.01Z" />
+    </svg>
+  );
+}
 
 export default function Catering() {
   const { t, language } = useLanguage();
@@ -134,7 +152,7 @@ export default function Catering() {
                 className="catering-whatsapp-btn"
                 aria-label={t('catering.cta.whatsapp')}
               >
-                <MessageCircle size={20} strokeWidth={1.7} />
+                <WhatsAppIcon />
               </a>
             </div>
           </aside>

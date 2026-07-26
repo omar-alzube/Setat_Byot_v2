@@ -17,8 +17,6 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   });
 
   useEffect(() => {
-    const root = document.documentElement;
-    // set dir based on current language (LanguageContext handles this too)
     if (theme === 'dark') {
       document.body.classList.remove('light');
     } else {

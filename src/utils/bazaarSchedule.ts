@@ -81,12 +81,6 @@ export function nextOpening(now: Date = new Date()): Date {
   return ammanLocalToDate(now, 4, 18, 0, weeksAhead);
 }
 
-// The Saturday 18:00 Amman time that ends the *currently open* window.
-// Only meaningful while isBazaarOpen(now) is true.
-export function currentClosing(now: Date = new Date()): Date {
-  return ammanLocalToDate(now, 6, 18, 0, 0);
-}
-
 export interface Countdown {
   days: number;
   hours: number;

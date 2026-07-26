@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '../context/LanguageContext';
 import { useTheme } from '../context/ThemeContext';
-import logo from '../assets/logo.png';
+import logo from '../assets/setat-byot-brand-logo.png';
 
 // ── Nav links ──────────────────────────────────────────────────────────────
 // Each link has a translation key and the section id it scrolls to
@@ -19,7 +19,15 @@ const NAV_LINKS = [
 
 // ── Smooth scroll helper ───────────────────────────────────────────────────
 function scrollTo(id: string) {
-  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  const target = document.getElementById(id);
+  if (!target) return;
+
+  const navbarHeight = Number.parseFloat(
+    getComputedStyle(document.documentElement).getPropertyValue('--navbar-height'),
+  ) || 80;
+  const top = target.getBoundingClientRect().top + window.scrollY - navbarHeight;
+
+  window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
 }
 
 // ── Sun icon ───────────────────────────────────────────────────────────────
@@ -57,47 +65,89 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   // Track whether the mobile menu is open
   const [mobileOpen, setMobileOpen] = useState(false);
+  // Mobile Safari can cancel scrolling if its menu is removed mid-animation.
+  const [pendingSection, setPendingSection] = useState<string | null>(null);
+  // The mobile navbar stays available from the top of the page.
+  const [isMobile, setIsMobile] = useState(false);
 
   // Listen to scroll events
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50);
+    onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  useEffect(() => {
+    const media = window.matchMedia('(max-width: 1023px)');
+    const updateMobile = () => {
+      setIsMobile(media.matches);
+      if (!media.matches) setMobileOpen(false);
+    };
+
+    updateMobile();
+    media.addEventListener('change', updateMobile);
+    return () => media.removeEventListener('change', updateMobile);
+  }, []);
+
+  useEffect(() => {
+    if (!mobileOpen) return;
+
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setMobileOpen(false);
+    };
+
+    window.addEventListener('keydown', closeOnEscape);
+    return () => window.removeEventListener('keydown', closeOnEscape);
+  }, [mobileOpen]);
+
   // Close mobile menu when clicking a nav link
   const handleNavClick = (id: string) => {
-    setMobileOpen(false);
+    if (mobileOpen) {
+      setPendingSection(id);
+      setMobileOpen(false);
+      return;
+    }
+
     scrollTo(id);
+  };
+
+  const finishMobileNavigation = () => {
+    if (!pendingSection) return;
+    scrollTo(pendingSection);
+    setPendingSection(null);
   };
 
   const isArabic = language === 'ar';
   const isDark   = theme === 'dark';
+  const navbarVisible = scrolled || isMobile || mobileOpen;
 
   return (
     <>
       {/* ── Navbar bar ──────────────────────────────────── */}
       <motion.nav
+        className="site-navbar"
+        aria-label={isArabic ? 'التنقل الرئيسي' : 'Main navigation'}
         style={{
           position: 'fixed',
           top: 0,
           left: 0,
           right: 0,
           zIndex: 100,
-          backgroundColor: scrolled
+          backgroundColor: navbarVisible
             ? (isDark ? 'rgba(19,19,19,0.92)' : 'rgba(244,240,232,0.95)')
             : 'transparent',
-          backdropFilter: scrolled ? 'blur(20px)' : 'none',
-          WebkitBackdropFilter: scrolled ? 'blur(20px)' : 'none',
-          borderBottom: scrolled ? '1px solid var(--accent-border)' : '1px solid transparent',
-          opacity: scrolled ? 1 : 0,
-          pointerEvents: scrolled ? 'auto' : 'none',
+          backdropFilter: navbarVisible ? 'blur(20px)' : 'none',
+          WebkitBackdropFilter: navbarVisible ? 'blur(20px)' : 'none',
+          borderBottom: navbarVisible ? '1px solid var(--accent-border)' : '1px solid transparent',
+          opacity: navbarVisible ? 1 : 0,
+          pointerEvents: navbarVisible ? 'auto' : 'none',
           transition: 'opacity 0.4s ease, background-color 0.4s ease, border-color 0.4s ease',
           height: 'var(--navbar-height)',
         }}
       >
         {/* ── Inner container ─────────────────────────────── */}
-        <div style={{
+        <div className="navbar-inner" style={{
           maxWidth: '1440px',
           margin: '0 auto',
           padding: '0 40px',
@@ -118,6 +168,7 @@ export default function Navbar() {
             <img
               src={logo}
               alt="ستات بيوت"
+              className="navbar-logo"
               style={{ height: '68px', width: 'auto', objectFit: 'contain' }}
             />
           </button>
@@ -163,7 +214,7 @@ export default function Navbar() {
           </nav>
 
           {/* ── Right-side controls ───────────────────────── */}
-          <div style={{
+          <div className="navbar-controls" style={{
             display: 'flex',
             alignItems: 'center',
             gap: '12px',
@@ -236,6 +287,7 @@ export default function Navbar() {
               onClick={() => setMobileOpen(prev => !prev)}
               aria-label="Toggle menu"
               aria-expanded={mobileOpen}
+              aria-controls="mobile-navigation"
               style={{
                 display: 'none',
                 flexDirection: 'column',
@@ -269,9 +321,10 @@ export default function Navbar() {
       </motion.nav>
 
       {/* ── Mobile dropdown menu ────────────────────────── */}
-      <AnimatePresence>
+      <AnimatePresence onExitComplete={finishMobileNavigation}>
         {mobileOpen && (
           <motion.div
+            id="mobile-navigation"
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
@@ -284,8 +337,13 @@ export default function Navbar() {
               zIndex: 99,
               backgroundColor: isDark ? 'rgba(19,19,19,0.97)' : 'rgba(244,240,232,0.98)',
               backdropFilter: 'blur(20px)',
+              WebkitBackdropFilter: 'blur(20px)',
               borderBottom: '1px solid var(--accent-border)',
-              overflow: 'hidden',
+              maxHeight: 'calc(100dvh - var(--navbar-height))',
+              overflowX: 'hidden',
+              overflowY: 'auto',
+              overscrollBehavior: 'contain',
+              WebkitOverflowScrolling: 'touch',
             }}
           >
             <div style={{
@@ -417,9 +475,18 @@ export default function Navbar() {
 
         /* Tighten padding on smaller screens */
         @media (max-width: 640px) {
-          nav > div {
-            padding: 0 20px !important;
-          }
+          :root { --navbar-height: 72px; }
+          .navbar-inner { padding: 0 16px !important; gap: 12px !important; }
+          .navbar-controls { gap: 8px !important; }
+          .navbar-logo { height: 58px !important; }
+        }
+
+        @media (max-width: 360px) {
+          .navbar-inner { padding: 0 10px !important; gap: 8px !important; }
+          .navbar-controls { gap: 6px !important; }
+          .navbar-logo { height: 52px !important; }
+          .icon-btn,
+          .hamburger { width: 36px !important; height: 36px !important; }
         }
       `}</style>
     </>

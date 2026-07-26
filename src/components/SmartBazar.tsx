@@ -2,18 +2,12 @@ import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { useLanguage } from '../context/LanguageContext';
 
-// @ts-ignore
-import imgBazar1  from '../assets/bazar1.jpg';
-// @ts-ignore
-import imgBazar2  from '../assets/bazar2.jpg';
-// @ts-ignore
-import imgBazar3  from '../assets/bazar3.jpg';
-// @ts-ignore
-import imgBazar4  from '../assets/bazar4.jpg';
-// @ts-ignore
-import imgBazar5  from '../assets/bazar5.jpg';
-// @ts-ignore
-import imgBazar6  from '../assets/bazar6.jpg';
+import imgBazar1  from '../assets/market-artisan-bakery-display.jpg';
+import imgBazar2  from '../assets/market-fresh-fruit-display.jpg';
+import imgBazar3  from '../assets/market-specialty-cheese-display.jpg';
+import imgBazar4  from '../assets/market-traditional-bakery-display.jpg';
+import imgBazar5  from '../assets/market-rice-provisions.jpg';
+import imgBazar6  from '../assets/market-premium-meat-display.jpg';
 
 const PRODUCTS = [
   { img: imgBazar1, label: 'cat.manoush',    style: { gridColumn: 'span 2', gridRow: 'span 2' } },
