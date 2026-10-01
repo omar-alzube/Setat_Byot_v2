@@ -1,6 +1,7 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { useLanguage } from '../context/LanguageContext';
+import LegalPolicies from './LegalPolicies';
 
 function AppleIcon() {
   return (
@@ -45,6 +46,7 @@ const SOCIAL_LINKS = [
 
 export default function DownloadCTA() {
   const { t, language } = useLanguage();
+  const [isPoliciesOpen, setIsPoliciesOpen] = useState(false);
   const isArabic = language === 'ar';
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.2 });
@@ -53,6 +55,7 @@ export default function DownloadCTA() {
   const fontTitle = isArabic ? 'var(--font-arabic)' : 'var(--font-serif)';
 
   return (
+    <>
     <footer
       ref={ref}
       style={{
@@ -164,7 +167,7 @@ export default function DownloadCTA() {
             <p>
               {isArabic ? 'الهاتف: ' : 'Phone: '}
               <span dir="ltr" style={{ direction: 'ltr', unicodeBidi: 'isolate' }}>
-                065233400
+                06 523 3400
               </span>
             </p>
           </div>
@@ -196,6 +199,14 @@ export default function DownloadCTA() {
           <p style={{ fontFamily: 'var(--font-sans)', fontSize: '0.72rem', color: 'var(--muted-foreground)', opacity: 0.5, letterSpacing: '0.06em' }}>
             {t('cta.copyright')}
           </p>
+          <button
+            type="button"
+            onClick={() => setIsPoliciesOpen(true)}
+            className="cta-link"
+            style={{ marginTop: '12px', border: 'none', background: 'none', color: 'var(--muted-foreground)', fontFamily: fontAr, fontSize: '0.72rem', textDecoration: 'underline', cursor: 'pointer' }}
+          >
+            {isArabic ? 'السياسات والشروط القانونية' : 'Legal Policies & Terms'}
+          </button>
         </motion.div>
       </div>
 
@@ -213,5 +224,7 @@ export default function DownloadCTA() {
         }
       `}</style>
     </footer>
+    {isPoliciesOpen && <LegalPolicies onClose={() => setIsPoliciesOpen(false)} />}
+    </>
   );
 }
