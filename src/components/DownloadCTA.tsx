@@ -164,7 +164,7 @@ export default function DownloadCTA() {
             <p>
               {isArabic ? 'الهاتف: ' : 'Phone: '}
               <span dir="ltr" style={{ direction: 'ltr', unicodeBidi: 'isolate' }}>
-                +962 79 823 3406 / 06 523 3400
+                065233400
               </span>
             </p>
           </div>
