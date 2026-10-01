@@ -1,8 +1,9 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { Award, Target, Flag, Users, ShieldCheck } from 'lucide-react';
 import msisLogo from '../assets/msis-certification-logo.png';
 import { useLanguage } from '../context/LanguageContext';
+import LegalPolicies from './LegalPolicies';
 
 const EXPERTISE = [
   'about.exp1','about.exp2','about.exp3','about.exp4','about.exp5',
@@ -46,6 +47,7 @@ function Divider() {
 
 export default function AboutUs() {
   const { t, language } = useLanguage();
+  const [policiesOpen, setPoliciesOpen] = useState(false);
   const isArabic = language === 'ar';
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.03 });
@@ -415,6 +417,25 @@ export default function AboutUs() {
               </div>
             ))}
           </div>
+          <div style={{ marginTop: '22px', paddingTop: '18px', borderTop: '1px solid var(--border)', textAlign: 'center' }}>
+            <button
+              type="button"
+              onClick={() => setPoliciesOpen(true)}
+              className="contact-link"
+              style={{
+                border: '1px solid var(--accent-border)',
+                borderRadius: '999px',
+                padding: '9px 18px',
+                color: 'var(--accent)',
+                background: 'transparent',
+                fontFamily: fontAr,
+                fontSize: isArabic ? '0.9rem' : '0.82rem',
+                cursor: 'pointer',
+              }}
+            >
+              {isArabic ? 'السياسات والشروط القانونية' : 'Legal Policies & Terms'}
+            </button>
+          </div>
         </motion.div>
 
       </div>
@@ -452,6 +473,7 @@ export default function AboutUs() {
           .msis-description { width: 100%; }
         }
       `}</style>
+      {policiesOpen && <LegalPolicies onClose={() => setPoliciesOpen(false)} />}
     </section>
   );
 }
